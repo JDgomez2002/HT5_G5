@@ -38,7 +38,7 @@ def procesoCompleto(env,ram,ram1):
             tiempo = env.now - tiempoInicio
 
 #----
-
+#Prueba para ver el funcionamiento
 env = simpy.Environment()
 RAM = simpy.Container(env,init = 100, capacity = 100)
 ram1 = simpy.Resource(env, capacity=1)
@@ -48,6 +48,11 @@ for i in range(5):
     env.process(procesoCompleto(env,RAM,ram1))
 
 env.run(until=10)
+
+#Falta sacar las estadísticas --> numpy --> tiene que ser array?
+#Necesito poder cambiar:
+# la cantidad de processos, el intervalo, memoria, velocidad del procesador y cantidad de procesadores
+# --> Una clase?
 
 
 
