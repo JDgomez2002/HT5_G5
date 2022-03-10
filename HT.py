@@ -49,18 +49,19 @@ random.seed(10)
 
 tiempo_total = 0
 memoria_ocupada = 0
+
 #Variables que podemos cambiar
-procesos = 70
-instrucciones = 3
+numero_de_procesos_por_programa = 70
+instrucciones_por_ciclo_reloj = 3
 capacidad_memoria = 100
 
-for i in range(procesos):
-    env.process(procesoRAM(env, ram, instrucciones,capacidad_memoria))
+for i in range(numero_de_procesos_por_programa):
+    env.process(procesoRAM(env, ram, instrucciones_por_ciclo_reloj,capacidad_memoria))
 
 env.run(until=50)  
 
 print()
-print ("tiempo promedio por programa es: ", tiempo_total/procesos)
+print ("tiempo promedio por programa es: ", tiempo_total/numero_de_procesos_por_programa)
 print()
 
 
