@@ -2,8 +2,9 @@
 import random
 import simpy
 
-def procesoRAM(env, ram, intrucciones_por_ciclo, cantidad_de_memoria):
+def procesoRAM(env, ram, intrucciones_por_ciclo):
     global tiempo_total
+    tiempo_inicio = env.now
 
     print()
 
@@ -14,7 +15,6 @@ def procesoRAM(env, ram, intrucciones_por_ciclo, cantidad_de_memoria):
     print("Numero de instrucciones a realiar: ", numero_instrucciones_a_realizar)
 
     numero_ciclos = 0
-    global memoria_ocupada 
 
     #velocidad del procesador
     # intrucciones_por_ciclo = 3
@@ -25,21 +25,19 @@ def procesoRAM(env, ram, intrucciones_por_ciclo, cantidad_de_memoria):
         numero_ciclos = int((int(numero_instrucciones_a_realizar/intrucciones_por_ciclo))+1)
 
     with ram.request() as turno:
-        while (memoria_ocupada <= cantidad_de_memoria):
-            print('Proceso en estado: READY')
-            memoria_ocupada = memoria_ocupada + memoria_proceso
-            yield turno
-        
-        tiempo_inicio2 = env.now
+        print('Proceso en estado: READY')
+        yield turno
         
         for i in range (numero_ciclos):
             yield env.timeout(1)
-        tiempo_de_programa2 = env.now - tiempo_inicio2
-        tiempo_total = tiempo_total + tiempo_de_programa2
+        
         print()
-        print("Se ha demorado ", tiempo_de_programa2 , "unidades de tiempo")
         print("Numero de ciclos realizados: ", numero_ciclos)
         print('Proceso en estado: TERMINATED')
+
+    tiempo_de_programa = env.now - tiempo_inicio
+    print("Se ha demorado ", tiempo_total , "unidades de tiempo")
+    tiempo_total = tiempo_total + tiempo_de_programa
         
 #-------------------------
 
@@ -48,20 +46,17 @@ ram = simpy.Resource(env, capacity=2)
 random.seed(10)
 
 tiempo_total = 0
-memoria_ocupada = 0
-#Variables que podemos cambiar
-procesos = 70
-instrucciones = 3
-capacidad_memoria = 100
 
-for i in range(procesos):
-    env.process(procesoRAM(env, ram, instrucciones,capacidad_memoria))
+for i in range(5):
+    env.process(procesoRAM(env, ram, 3))
 
 env.run(until=50)  
 
 print()
-print ("tiempo promedio por programa es: ", tiempo_total/procesos)
+print ("tiempo promedio por programa es: ", tiempo_total/5.0)
 print()
+
+
 
 
 
